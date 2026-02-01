@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SNAKE OS - BLACK EDITION</title>
+    <title>SNAKE OS - BLACK OPS</title>
     <link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
     <style>
         /* --- עיצוב בסיסי שחור --- */
@@ -11,7 +11,7 @@
 
         /* --- הבר העליון --- */
         .admin-header {
-            background: #050505; /* שחור כמעט מוחלט */
+            background: #050505;
             border-bottom: 1px solid #333;
             height: 50px;
             display: flex;
@@ -22,7 +22,6 @@
         }
         .brand { color: #fff; font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
         
-        /* השעון */
         .clock-display {
             font-family: 'Courier New', monospace;
             font-size: 18px;
@@ -33,24 +32,19 @@
             border: 1px solid #1a1a1a;
             border-radius: 4px;
             letter-spacing: 1px;
+            position: absolute; left: 50%; transform: translateX(-50%); /* ממורכז */
         }
 
         .user-area { display: flex; align-items: center; gap: 15px; }
         .icon-btn { cursor: pointer; font-size: 20px; color: #666; transition: 0.3s; }
         .icon-btn:hover { color: #fff; }
-        .user-profile-btn { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 10px; border-radius: 20px; transition: 0.2s; }
-        .user-profile-btn:hover { background: rgba(255,255,255,0.05); }
-        .user-avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #444; background-size: cover; background-position: center; }
-        .user-info-text { font-size: 12px; text-align: right; color: #888; }
-        .user-name { font-weight: bold; color: #ddd; }
-
+        
         /* תפריטים */
         .dropdown-menu { position: absolute; top: 55px; left: 15px; background: #111; border: 1px solid #333; border-radius: 8px; width: 280px; padding: 15px; display: none; flex-direction: column; gap:8px; z-index:300; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .dropdown-menu.show { display: flex; }
         .input-group label { font-size: 12px; color: #666; display: block; margin-bottom: 3px; }
         .input-group input { width: 100%; background: #000; border: 1px solid #333; color: white; padding: 8px; border-radius: 5px; }
         .save-btn { background: #333; color: white; border: 1px solid #555; padding: 8px; border-radius: 5px; cursor: pointer; margin-top: 5px; }
-        .save-btn:hover { background: #444; }
 
         /* --- ניווט --- */
         .nav-container { background: #0a0a0a; border-bottom: 1px solid #222; display: flex; flex-direction: column; padding-top: 5px; }
@@ -63,8 +57,16 @@
         .add-tab-btn:hover { color: #fff; }
 
         .address-bar-row { padding: 8px 15px; display: flex; gap: 10px; align-items: center; background: #000; border-bottom: 1px solid #111; }
-        .nav-btn { background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 5px 10px; border-radius: 5px; }
-        .nav-btn:hover { background: #222; color: #fff; }
+        
+        /* כפתורי ניווט */
+        .nav-btn { 
+            background: #111; border: 1px solid #333; color: #aaa; font-size: 14px; 
+            cursor: pointer; width: 32px; height: 32px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .nav-btn:hover { background: #333; color: #fff; border-color: #666; }
+        .nav-btn:active { transform: scale(0.95); }
+
         .url-input { flex-grow: 1; background: #111; border: 1px solid #333; color: #aaa; padding: 6px 15px; border-radius: 20px; font-size: 13px; direction: ltr; text-align: left; font-family: monospace; }
         .url-input:focus { border-color: #555; color: #fff; }
 
@@ -73,34 +75,16 @@
         .page-content { width: 100%; height: 100%; display: none; flex-direction: column; position: relative; }
         .page-content.active { display: flex; }
 
-        /* מסך הבית המעוצב */
         .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: white; background: #000; }
         
-        /* לוגו מורכב עם הסמל שלך */
         .logo-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
+            position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
         }
-        
-        /* הסמל שלך ברקע */
         .my-custom-bg-logo {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.2; /* שקיפות כדי שזה יהיה ברקע */
-            background-image: url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); /* שים פה את הלינק לתמונה שלך */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            filter: blur(1px);
+            position: absolute; width: 100%; height: 100%; opacity: 0.2;
+            background-image: url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); /* שים פה את הלוגו שלך */
+            background-size: contain; background-repeat: no-repeat; background-position: center; filter: blur(1px);
         }
-
-        /* הסמל הקדמי */
         .main-icon { font-size: 80px; z-index: 2; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
 
         .big-search-box { 
@@ -110,65 +94,46 @@
         }
         .big-search-box:focus { border-color: #666; box-shadow: 0 0 15px rgba(255,255,255,0.05); }
 
-        /* --- Iframe ועיצוב הבר המזויף --- */
+        /* --- Iframe --- */
         .iframe-wrapper {
-            flex-grow: 1;
-            position: relative;
-            overflow: hidden; 
-            background: #000; /* רקע שחור לאייפריים */
-            display: none;
+            flex-grow: 1; position: relative; overflow: hidden; background: #000; display: none;
         }
 
+        /* --- הטריק החשוב: הפיכת צבעים בתוך האייפריים --- */
         .iframe-wrapper iframe {
             width: 100%;
-            height: calc(100% + 100px); /* חיתוך עליון */
+            height: calc(100% + 100px);
             border: none;
             position: absolute;
             top: -100px; 
             left: 0;
-            background: #000;
+            background: #fff;
+            /* הפילטר שהופך את גוגל לשחור */
+            filter: invert(1) hue-rotate(180deg) contrast(0.9);
         }
 
-        /* הבר השחור המזויף */
         .fake-google-bar {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 70px;
-            background: #0a0a0a; /* צבע שחור */
-            border-bottom: 1px solid #222;
-            z-index: 10;
-            display: flex; align-items: center; justify-content: center;
-            padding: 0 20px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 70px;
+            background: #0a0a0a; border-bottom: 1px solid #222; z-index: 10;
+            display: flex; align-items: center; justify-content: center; padding: 0 20px;
         }
 
-        .fake-google-bar .site-brand {
-            position: absolute;
-            right: 20px;
-            display: flex; align-items: center;
-        }
-        /* הסמל הקטן בפינה */
+        .fake-google-bar .site-brand { position: absolute; right: 20px; display: flex; align-items: center; }
         .corner-logo {
             width: 40px; height: 40px;
-            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/fingerprint.png'); /* שים פה שוב את הסמל שלך */
-            background-size: cover;
-            opacity: 0.5;
+            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/fingerprint.png'); /* לוגו בפינה */
+            background-size: cover; opacity: 0.5;
         }
 
         .fake-search-input-wrapper {
-            max-width: 700px;
-            width: 100%;
-            height: 44px;
-            background: #1a1a1a; /* רקע כהה לחיפוש */
-            border: 1px solid #333;
-            border-radius: 24px;
-            display: flex; align-items: center; padding: 0 15px; 
-            gap: 10px;
+            max-width: 700px; width: 100%; height: 44px;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 24px;
+            display: flex; align-items: center; padding: 0 15px; gap: 10px;
         }
         .fake-input { flex-grow: 1; border: none; outline: none; font-size: 14px; color: #ddd; background: transparent; }
         
         .controls-wrapper { display: flex; gap: 10px; align-items: center; }
-        .game-mode-btn {
-            background: #333; color: #fff; padding: 5px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #444;
-        }
+        .game-mode-btn { background: #333; color: #fff; padding: 5px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #444; }
         .game-mode-btn:hover { background: #444; border-color: #fff; }
 
         .exit-game-btn {
@@ -178,8 +143,7 @@
         }
         .iframe-wrapper.game-mode .exit-game-btn { display: block; }
 
-        /* מצב משחק */
-        .iframe-wrapper.game-mode iframe { top: 0 !important; height: 100% !important; }
+        .iframe-wrapper.game-mode iframe { top: 0 !important; height: 100% !important; filter: none; /* ביטול פילטר במשחקים */ }
         .iframe-wrapper.game-mode .fake-google-bar { top: -100px; }
 
     </style>
@@ -191,23 +155,12 @@
         <div class="brand">SNAKE OS <span style="font-size:10px; color:#444; margin-right:5px;">BLACK</span></div>
         <div class="clock-display" id="real-time-clock">00:00:00</div>
         <div class="user-area">
-            <div class="icon-btn" onclick="toggleMenu('bg-menu')">⚙️</div>
-            <div class="user-profile-btn" onclick="toggleMenu('profile-menu')">
-                <div class="user-info-text">
-                    <div class="user-name" id="display-name">User</div>
-                </div>
-                <div class="user-avatar" id="display-avatar"></div>
-            </div>
+            <div class="icon-btn" onclick="toggleMenu('bg-menu')">🎨</div>
         </div>
 
-        <div class="dropdown-menu" id="profile-menu">
-            <div class="input-group"><label>Name:</label><input type="text" id="edit-name"></div>
-            <div class="input-group"><label>Avatar URL:</label><input type="text" id="edit-avatar"></div>
-            <button class="save-btn" onclick="saveProfile()">SAVE</button>
-        </div>
         <div class="dropdown-menu" id="bg-menu" style="right: 60px; left: auto;">
-            <div class="input-group"><label>BG Image:</label><input type="text" id="bg-input"></div>
-            <button class="save-btn" onclick="changeBackground()">APPLY</button>
+            <div class="input-group"><label>לינק לתמונה:</label><input type="text" id="bg-input"></div>
+            <button class="save-btn" onclick="changeBackground()">שנה רקע</button>
         </div>
     </div>
 
@@ -218,10 +171,11 @@
             <div class="add-tab-btn" onclick="openNewTab()">+</div>
         </div>
         <div class="address-bar-row">
-            <button class="nav-btn" onclick="window.history.back()">◄</button>
-            <button class="nav-btn" onclick="window.history.forward()">►</button>
+            <!-- תיקון החצים: שימוש ב-onclick שבודק היסטוריה -->
+            <button class="nav-btn" onclick="goBack()">➜</button> <!-- ימינה זה אחורה בעברית -->
+            <button class="nav-btn" style="transform: scaleX(-1);" onclick="goForward()">➜</button> <!-- שמאלה זה קדימה -->
             <button class="nav-btn" onclick="doRefresh()">↻</button>
-            <input type="text" class="url-input" id="url-bar" placeholder="Search or Type URL..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+            <input type="text" class="url-input" id="url-bar" placeholder="חיפוש חופשי..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
         </div>
     </div>
 
@@ -239,10 +193,18 @@
         let tabCounter = 0;
         let activeTabId = null;
 
+        // ניהול היסטוריה פנימי פשוט
+        let historyStack = {}; 
+        let historyIndex = {};
+
         function openNewTab() {
             tabCounter++;
             const tabId = 'tab-' + tabCounter;
             const contentId = 'content-' + tabCounter;
+            
+            // אתחול היסטוריה לטאב הזה
+            historyStack[tabId] = ['home'];
+            historyIndex[tabId] = 0;
 
             const tabsList = document.getElementById('tabs-list');
             const newTab = document.createElement('div');
@@ -260,17 +222,15 @@
             newContent.innerHTML = `
                 <div class="home-screen">
                     <div class="logo-container">
-                        <!-- הסמל שלך ברקע -->
                         <div class="my-custom-bg-logo"></div>
-                        <!-- הסמל הראשי מלפנים -->
                         <div class="main-icon">🐍</div>
                     </div>
-                    <h1 style="color:#fff; font-weight:300; letter-spacing:2px; margin-top:0;">SECURE SEARCH</h1>
-                    <input type="text" class="big-search-box" placeholder="Search the dark web..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                    <h1 style="color:#fff; font-weight:300; letter-spacing:2px; margin-top:0;">SECURE ACCESS</h1>
+                    <input type="text" class="big-search-box" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
                 </div>
                 
                 <div class="iframe-wrapper">
-                    <div class="exit-game-btn" onclick="toggleGameMode('${contentId}', false)">EXIT FULLSCREEN</div>
+                    <div class="exit-game-btn" onclick="toggleGameMode('${contentId}', false)">EXIT GAME MODE</div>
 
                     <div class="fake-google-bar">
                         <div class="site-brand">
@@ -301,6 +261,17 @@
 
         function performSearch(query) {
             if(!activeTabId || !query) return;
+            
+            // עדכון היסטוריה
+            const currentStack = historyStack[activeTabId];
+            const currentIndex = historyIndex[activeTabId];
+            // מוחק את כל מה שקדימה אם היינו באמצע
+            if (currentIndex < currentStack.length - 1) {
+                historyStack[activeTabId] = currentStack.slice(0, currentIndex + 1);
+            }
+            historyStack[activeTabId].push(query);
+            historyIndex[activeTabId]++;
+
             loadContent(activeTabId, query);
         }
 
@@ -312,17 +283,27 @@
             const iframe = wrapper.querySelector('iframe');
             const fakeInput = wrapper.querySelector('.fake-input');
 
-            wrapper.classList.remove('game-mode');
+            if (query === 'home') {
+                home.style.display = 'flex';
+                wrapper.style.display = 'none';
+                document.getElementById('url-bar').value = '';
+                document.querySelector(`#${tabId} span`).innerText = 'דף הבית';
+                return;
+            }
+
             home.style.display = 'none';
             wrapper.style.display = 'block';
+            wrapper.classList.remove('game-mode');
 
             let url = "";
             if (query.indexOf('.') > -1 && query.indexOf(' ') === -1) {
+                // כתובת ישירה - נפתח במצב משחק (בלי פילטר צבעים)
                 url = query.startsWith('http') ? query : 'https://' + query;
                 wrapper.classList.add('game-mode'); 
             } else {
-                // שימוש ב-DuckDuckGo במצב Dark Mode כדי להעיף את גוגל הלבן
-                url = "https://duckduckgo.com/?kae=d&k1=-1&kp=-2&q=" + encodeURIComponent(query);
+                // חיפוש - משתמש בגוגל אבל עם פילטר צבעים שחור
+                // igu=1 זה הטריק שנותן לגוגל לעבוד בתוך אייפריים
+                url = "https://www.google.com/search?igu=1&q=" + encodeURIComponent(query);
             }
 
             if(iframe.src !== url) iframe.src = url;
@@ -333,6 +314,25 @@
             if(fakeInput) fakeInput.value = query;
         }
 
+        // --- פונקציות החצים המתוקנות ---
+        function goBack() {
+            if (!activeTabId) return;
+            if (historyIndex[activeTabId] > 0) {
+                historyIndex[activeTabId]--;
+                const query = historyStack[activeTabId][historyIndex[activeTabId]];
+                loadContent(activeTabId, query);
+            }
+        }
+
+        function goForward() {
+            if (!activeTabId) return;
+            if (historyIndex[activeTabId] < historyStack[activeTabId].length - 1) {
+                historyIndex[activeTabId]++;
+                const query = historyStack[activeTabId][historyIndex[activeTabId]];
+                loadContent(activeTabId, query);
+            }
+        }
+
         function switchToTab(tabId) {
             activeTabId = tabId;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -341,9 +341,10 @@
             const contentId = tabId.replace('tab-', 'content-');
             document.getElementById(contentId).classList.add('active');
             
-            const isHome = document.getElementById(contentId).querySelector('.home-screen').style.display !== 'none';
-            if(isHome) document.getElementById('url-bar').value = '';
-            else document.getElementById('url-bar').value = document.querySelector(`#${tabId} span`).innerText;
+            // שחזור הכתובת בבר העליון
+            const currentIndex = historyIndex[tabId];
+            const currentQuery = historyStack[tabId][currentIndex];
+            document.getElementById('url-bar').value = (currentQuery === 'home') ? '' : currentQuery;
         }
 
         function closeTab(e, tabId) {
@@ -357,22 +358,17 @@
             }
             tab.remove();
             document.getElementById(tabId.replace('tab-', 'content-')).remove();
+            delete historyStack[tabId];
+            delete historyIndex[tabId];
         }
 
         function doRefresh() {
             if(activeTabId) {
                 const iframe = document.getElementById(activeTabId.replace('tab-', 'content-')).querySelector('iframe');
-                iframe.src = iframe.src;
+                if (iframe.style.display !== 'none') iframe.src = iframe.src;
             }
         }
 
-        function saveProfile() {
-            const name = document.getElementById('edit-name').value;
-            const avatar = document.getElementById('edit-avatar').value;
-            if(name) { document.getElementById('display-name').innerText = name; localStorage.setItem('uName', name); }
-            if(avatar) { document.getElementById('display-avatar').style.backgroundImage = `url('${avatar}')`; localStorage.setItem('uAvatar', avatar); }
-            toggleMenu('profile-menu');
-        }
         function changeBackground() {
             const url = document.getElementById('bg-input').value;
             if(url) { document.body.style.backgroundImage = `url('${url}')`; localStorage.setItem('uBg', url); }
@@ -385,11 +381,7 @@
             if(!show) el.classList.add('show');
         }
         
-        const uName = localStorage.getItem('uName');
-        const uAvatar = localStorage.getItem('uAvatar');
         const uBg = localStorage.getItem('uBg');
-        if(uName) document.getElementById('display-name').innerText = uName;
-        if(uAvatar) document.getElementById('display-avatar').style.backgroundImage = `url('${uAvatar}')`;
         if(uBg) document.body.style.backgroundImage = `url('${uBg}')`;
 
         window.onclick = e => {
