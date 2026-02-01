@@ -2,158 +2,120 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>SNAKE OS - ULTIMATE BLACK</title>
+    <title>SNAKE OS - PURE BLACK</title>
     <link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
     <style>
-        /* --- עיצוב בסיסי שחור --- */
+        /* --- הגדרות כלליות --- */
         body, html { margin: 0; padding: 0; height: 100%; background: #000; font-family: 'Segoe UI', sans-serif; overflow: hidden; color: #e0e0e0; display: flex; flex-direction: column; }
         * { box-sizing: border-box; outline: none; }
 
-        /* --- הבר העליון --- */
+        /* --- הבר העליון (דק ונקי) --- */
         .admin-header {
-            background: #050505;
-            border-bottom: 1px solid #333;
-            height: 40px; /* הנמכתי קצת שיהיה יותר מקום לאתר */
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            justify-content: space-between;
-            z-index: 200;
+            background: #000;
+            border-bottom: 1px solid #111;
+            height: 40px;
+            display: flex; align-items: center; padding: 0 15px; justify-content: space-between; z-index: 200;
         }
-        .brand { color: #fff; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px; opacity: 0.8; }
+        .brand { color: #fff; font-weight: bold; font-size: 14px; opacity: 0.5; }
         
+        /* שעון */
         .clock-display {
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #0f0;
-            text-shadow: 0 0 5px #0f0;
+            font-family: monospace; font-size: 14px; color: #0f0; 
             position: absolute; left: 50%; transform: translateX(-50%);
         }
 
         /* --- ניווט --- */
-        .nav-container { background: #080808; border-bottom: 1px solid #222; display: flex; flex-direction: column; padding-top: 5px; }
+        .nav-container { background: #050505; border-bottom: 1px solid #111; display: flex; flex-direction: column; padding-top: 5px; }
         .tabs-row { display: flex; align-items: flex-end; padding: 0 10px; gap: 5px; height: 30px; }
-        .tab { background: #1a1a1a; color: #666; padding: 2px 15px; border-radius: 8px 8px 0 0; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; max-width: 150px; border: 1px solid #222; border-bottom: none; }
-        .tab.active { background: #000; color: #fff; height: 31px; border-top: 2px solid #0f0; border-bottom: 1px solid #000; z-index: 10; }
-        .close-tab { font-size: 14px; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+        .tab { background: #111; color: #666; padding: 2px 15px; border-radius: 8px 8px 0 0; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; max-width: 150px; border: 1px solid #222; border-bottom: none; }
+        .tab.active { background: #000; color: #fff; height: 31px; border-top: 1px solid #333; border-bottom: 1px solid #000; z-index: 10; }
+        .close-tab { font-size: 14px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
         .close-tab:hover { color: #f00; }
-        .add-tab-btn { color: #444; font-size: 20px; cursor: pointer; padding: 0 10px; font-weight: bold; }
+        .add-tab-btn { color: #444; font-size: 20px; cursor: pointer; padding: 0 10px; }
 
         .address-bar-row { padding: 5px 15px; display: flex; gap: 10px; align-items: center; background: #000; border-bottom: 1px solid #111; height: 50px; }
-        .nav-btn { background: #111; border: 1px solid #333; color: #aaa; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .nav-btn:hover { background: #333; color: #fff; }
-        .url-input { flex-grow: 1; background: #111; border: 1px solid #333; color: #0f0; padding: 6px 15px; border-radius: 20px; font-size: 13px; direction: ltr; text-align: left; font-family: monospace; }
+        .nav-btn { background: #000; border: 1px solid #222; color: #888; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .nav-btn:hover { background: #111; color: #fff; }
+        .url-input { flex-grow: 1; background: #0a0a0a; border: 1px solid #222; color: #ddd; padding: 6px 15px; border-radius: 20px; font-size: 13px; direction: ltr; text-align: left; font-family: monospace; }
 
         /* --- תוכן --- */
         #content-area { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
         .page-content { width: 100%; height: 100%; display: none; flex-direction: column; position: relative; }
         .page-content.active { display: flex; }
 
-        /* --- מסך הבית --- */
-        .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: white; background: #000; z-index: 5; position: relative; }
-        
-        .logo-container { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        /* הלוגו הגדול שלך במסך הבית */
+        /* מסך הבית */
+        .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #000; z-index: 5; }
+        .logo-container { width: 120px; height: 120px; margin-bottom: 20px; position: relative; }
         .my-custom-bg-logo {
-            position: absolute; width: 100%; height: 100%; opacity: 0.8;
-            background-image: url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); 
+            width: 100%; height: 100%;
+            background-image: url('https://img.icons8.com/ios-filled/150/ffffff/fingerprint.png'); /* שים פה את הלוגו שלך */
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 0 10px #0f0); /* זוהר ירוק */
-        }
-        .main-icon { font-size: 80px; z-index: 2; opacity: 0; } /* הסתרתי את הנחש כדי שיראו רק את הלוגו שלך */
-
-        .big-search-box { 
-            width: 500px; padding: 15px 25px; border-radius: 30px; 
-            background: #111; border: 1px solid #333; color: white; font-size: 16px; 
-            text-align: center; transition: 0.3s;
+            opacity: 0.8;
         }
 
-        /* --- Iframe Area --- */
+        /* --- אזור האייפריים --- */
         .iframe-wrapper {
             flex-grow: 1; position: relative; overflow: hidden; background: #000; display: none;
         }
 
-        /* הפילטר המיוחד - הופך הכל לשחור/אפור/ירוק ומעלים צבעים של גוגל */
+        /* אייפריים - הופכים צבעים לשחור */
         .iframe-wrapper iframe {
             width: 100%;
-            height: calc(100% + 100px); /* חותך את הלמעלה של גוגל */
+            height: 100%; /* גובה מלא, בלי חיתוך */
             border: none;
-            position: absolute;
-            top: -100px; 
-            left: 0;
             background: #fff;
-            filter: invert(1) hue-rotate(180deg) grayscale(1) contrast(1.1); 
+            /* הפילטר הזה הופך את גוגל לשחור */
+            filter: invert(1) hue-rotate(180deg) grayscale(1);
         }
 
-        /* --- הבר המזויף העליון (מסתיר את החיפוש של גוגל) --- */
-        .fake-google-bar {
-            position: absolute; top: 0; left: 0; width: 100%; height: 70px;
-            background: #000; border-bottom: 1px solid #222; z-index: 20;
-            display: flex; align-items: center; justify-content: center; padding: 0 20px;
-        }
-
-        /* הלוגו שלך בפינה של הבר */
-        .site-brand { position: absolute; right: 20px; display: flex; align-items: center; }
-        .corner-logo {
-            width: 45px; height: 45px;
-            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/fingerprint.png'); 
-            background-size: cover; 
-            filter: drop-shadow(0 0 5px #0f0);
-        }
-
-        /* תיבת החיפוש המזויפת */
-        .fake-search-input-wrapper {
-            max-width: 700px; width: 100%; height: 44px;
-            background: #111; border: 1px solid #333; border-radius: 24px;
-            display: flex; align-items: center; padding: 0 15px; gap: 10px;
-        }
-        .fake-input { flex-grow: 1; border: none; outline: none; font-size: 14px; color: #ddd; background: transparent; }
-
-        /* --- הפס התחתון שמסתיר את הלוגו של גוגל למטה --- */
-        .bottom-hider-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px; /* הגובה של ההסתרה */
-            background: #000;
-            z-index: 50; /* מעל הכל */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid #222;
-            color: #444;
-            font-size: 12px;
-            pointer-events: none; /* כדי שאפשר יהיה ללחוץ דרכו במקרה הצורך, אם כי זה מסתיר ויזואלית */
-        }
-
-        /* --- סימן מים קבוע ברקע (הלוגו שלך) --- */
-        .persistent-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background-image: url('https://img.icons8.com/ios-filled/300/ffffff/fingerprint.png'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.05; /* שקוף מאוד */
-            pointer-events: none;
-            z-index: 15; /* מעל האייפריים אבל מתחת לבר */
-        }
-
-        .game-mode-btn { background: #333; color: #fff; padding: 5px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #444; }
+        /* --- הכיסויים השחורים ("הצביעה") --- */
         
-        .exit-game-btn {
-            position: absolute; top: 10px; right: 20px; z-index: 100;
-            background: rgba(0,0,0,0.8); color: #fff; padding: 5px 15px; border-radius: 20px;
-            cursor: pointer; display: none; border: 1px solid #fff; font-weight: bold;
+        /* 1. הבר השחור העליון - מסתיר את הלוגו של גוגל למעלה */
+        .paint-it-black-header {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            height: 120px; /* הגובה שמכסה את הלוגו של גוגל */
+            background: #000;
+            z-index: 20;
+            border-bottom: 1px solid #111;
+            display: flex; align-items: center; justify-content: center;
         }
-        .iframe-wrapper.game-mode .exit-game-btn { display: block; }
-        .iframe-wrapper.game-mode iframe { top: 0 !important; height: 100% !important; filter: none; }
-        .iframe-wrapper.game-mode .fake-google-bar { top: -100px; }
-        .iframe-wrapper.game-mode .bottom-hider-bar { display: none; } /* במצב משחק לא צריך להסתיר למטה */
+
+        /* 2. הבר השחור התחתון - מסתיר את הלוגו של גוגל למטה */
+        .paint-it-black-footer {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            height: 50px; /* הגובה שמכסה את הלוגו למטה */
+            background: #000;
+            z-index: 20;
+            border-top: 1px solid #111;
+        }
+
+        /* האלמנטים שיושבים על הבר השחור העליון */
+        .my-overlay-controls {
+            width: 80%; max-width: 700px;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .corner-logo {
+            width: 50px; height: 50px;
+            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/fingerprint.png'); /* לוגו שלך */
+            background-size: cover; opacity: 0.7;
+        }
+        .fake-search-wrapper {
+            flex-grow: 1; height: 44px;
+            background: #111; border: 1px solid #333; border-radius: 22px;
+            display: flex; align-items: center; padding: 0 15px;
+        }
+        .fake-input { flex-grow: 1; background: transparent; border: none; color: white; font-size: 14px; }
+
+        /* לוגו מים ענק באמצע המסך שקוף */
+        .watermark-bg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 400px; height: 400px;
+            background-image: url('https://img.icons8.com/ios-filled/400/ffffff/fingerprint.png');
+            background-size: contain; background-repeat: no-repeat;
+            opacity: 0.03; pointer-events: none; z-index: 10;
+        }
 
     </style>
 </head>
@@ -219,42 +181,34 @@
                     <div class="logo-container">
                         <div class="my-custom-bg-logo"></div>
                     </div>
-                    <h1 style="color:#fff; font-weight:300; letter-spacing:2px; margin-top:0;">SECURE ACCESS</h1>
-                    <input type="text" class="big-search-box" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                    <h1 style="color:#fff; font-weight:300; margin:0;">SECURE SEARCH</h1>
+                    <div style="margin-top:20px; width:500px; height:44px; background:#111; border-radius:22px; border:1px solid #333; display:flex; align-items:center; padding:0 15px;">
+                        <input type="text" style="width:100%; background:transparent; border:none; color:white;" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                    </div>
                 </div>
                 
                 <div class="iframe-wrapper">
-                    <!-- סימן מים קבוע ברקע -->
-                    <div class="persistent-watermark"></div>
+                    <div class="watermark-bg"></div>
 
-                    <!-- הפס התחתון שמסתיר את הלוגו של גוגל -->
-                    <div class="bottom-hider-bar">SNAKE OS SECURE LAYER</div>
-
-                    <div class="exit-game-btn" onclick="toggleGameMode('${contentId}', false)">EXIT FULLSCREEN</div>
-
-                    <div class="fake-google-bar">
-                        <div class="site-brand">
+                    <!-- הכיסוי השחור העליון (מסתיר את גוגל למעלה) -->
+                    <div class="paint-it-black-header">
+                        <div class="my-overlay-controls">
                             <div class="corner-logo"></div>
-                        </div>
-
-                        <div class="fake-search-input-wrapper">
-                            <span style="color:#666">🔎</span>
-                            <input type="text" class="fake-input" onkeypress="if(event.key==='Enter') performSearch(this.value)" placeholder="Search...">
-                            <div class="game-mode-btn" onclick="toggleGameMode('${contentId}', true)">GAME MODE</div>
+                            <div class="fake-search-wrapper">
+                                <span style="color:#666; margin-left:10px;">🔍</span>
+                                <input type="text" class="fake-input" onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                            </div>
                         </div>
                     </div>
+
+                    <!-- הכיסוי השחור התחתון (מסתיר את גוגל למטה) -->
+                    <div class="paint-it-black-footer"></div>
                     
                     <iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-pointer-lock"></iframe>
                 </div>
             `;
             contentArea.appendChild(newContent);
             switchToTab(tabId);
-        }
-
-        function toggleGameMode(contentId, enable) {
-            const wrapper = document.getElementById(contentId).querySelector('.iframe-wrapper');
-            if (enable) wrapper.classList.add('game-mode');
-            else wrapper.classList.remove('game-mode');
         }
 
         function performSearch(query) {
@@ -276,6 +230,8 @@
             const wrapper = contentDiv.querySelector('.iframe-wrapper');
             const iframe = wrapper.querySelector('iframe');
             const fakeInput = wrapper.querySelector('.fake-input');
+            const headerCover = wrapper.querySelector('.paint-it-black-header');
+            const footerCover = wrapper.querySelector('.paint-it-black-footer');
 
             if (query === 'home') {
                 home.style.display = 'flex';
@@ -287,14 +243,24 @@
 
             home.style.display = 'none';
             wrapper.style.display = 'block';
-            wrapper.classList.remove('game-mode');
 
             let url = "";
             if (query.indexOf('.') > -1 && query.indexOf(' ') === -1) {
+                // גלישה לאתר רגיל (לא גוגל)
                 url = query.startsWith('http') ? query : 'https://' + query;
-                wrapper.classList.add('game-mode'); 
+                // באתרים רגילים - נבטל את הפסים השחורים כי לא צריך להסתיר את גוגל
+                headerCover.style.display = 'none';
+                footerCover.style.display = 'none';
+                // נבטל גם את הפיכת הצבעים כדי שיראו את האתר רגיל
+                iframe.style.filter = 'none';
             } else {
+                // חיפוש בגוגל
                 url = "https://www.google.com/search?igu=1&q=" + encodeURIComponent(query);
+                // נחזיר את הפסים השחורים שמסתירים את הלוגו
+                headerCover.style.display = 'flex';
+                footerCover.style.display = 'block';
+                // נחזיר את הפיכת הצבעים לשחור
+                iframe.style.filter = 'invert(1) hue-rotate(180deg) grayscale(1)';
             }
 
             if(iframe.src !== url) iframe.src = url;
