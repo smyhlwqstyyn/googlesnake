@@ -1,363 +1,328 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>SNAKE OS - ULTIMATE BLACK</title>
-    <link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
-    <style>
-        /* --- עיצוב בסיסי שחור --- */
-        body, html { margin: 0; padding: 0; height: 100%; background: #000; font-family: 'Segoe UI', sans-serif; overflow: hidden; color: #e0e0e0; display: flex; flex-direction: column; }
-        * { box-sizing: border-box; outline: none; }
+<meta charset="UTF-8">
+<title>SNAKE OS - ULTIMATE BLACK</title>
+<link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
+<style>
+body, html {
+    margin:0; padding:0; height:100%;
+    background:#000; color:#e0e0e0;
+    font-family:'Segoe UI', sans-serif;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+}
+* { box-sizing:border-box; }
 
-        /* --- הבר העליון --- */
-        .admin-header {
-            background: #050505;
-            border-bottom: 1px solid #333;
-            height: 40px; /* הנמכתי קצת שיהיה יותר מקום לאתר */
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            justify-content: space-between;
-            z-index: 200;
-        }
-        .brand { color: #fff; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px; opacity: 0.8; }
-        
-        .clock-display {
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #0f0;
-            text-shadow: 0 0 5px #0f0;
-            position: absolute; left: 50%; transform: translateX(-50%);
-        }
+.admin-header {
+    background:#050505; height:40px;
+    display:flex; align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    border-bottom:1px solid #333;
+}
+.brand { color:#fff; font-weight:bold; }
+.clock-display {
+    color:#0f0;
+    font-family:monospace;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+}
 
-        /* --- ניווט --- */
-        .nav-container { background: #080808; border-bottom: 1px solid #222; display: flex; flex-direction: column; padding-top: 5px; }
-        .tabs-row { display: flex; align-items: flex-end; padding: 0 10px; gap: 5px; height: 30px; }
-        .tab { background: #1a1a1a; color: #666; padding: 2px 15px; border-radius: 8px 8px 0 0; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; max-width: 150px; border: 1px solid #222; border-bottom: none; }
-        .tab.active { background: #000; color: #fff; height: 31px; border-top: 2px solid #0f0; border-bottom: 1px solid #000; z-index: 10; }
-        .close-tab { font-size: 14px; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
-        .close-tab:hover { color: #f00; }
-        .add-tab-btn { color: #444; font-size: 20px; cursor: pointer; padding: 0 10px; font-weight: bold; }
+.nav-container { background:#080808; border-bottom:1px solid #222; }
+.tabs-row {
+    display:flex; align-items:flex-end;
+    padding:0 10px; gap:5px; height:30px;
+}
+.tab {
+    background:#1a1a1a; color:#666;
+    padding:2px 15px;
+    border-radius:8px 8px 0 0;
+    font-size:12px;
+    cursor:pointer;
+    border:1px solid #222;
+    border-bottom:none;
+}
+.tab.active {
+    background:#000; color:#fff;
+    border-top:2px solid #0f0;
+}
+.close-tab:hover { color:red; cursor:pointer; }
+.add-tab-btn { font-size:20px; cursor:pointer; color:#444; }
 
-        .address-bar-row { padding: 5px 15px; display: flex; gap: 10px; align-items: center; background: #000; border-bottom: 1px solid #111; height: 50px; }
-        .nav-btn { background: #111; border: 1px solid #333; color: #aaa; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .nav-btn:hover { background: #333; color: #fff; }
-        .url-input { flex-grow: 1; background: #111; border: 1px solid #333; color: #0f0; padding: 6px 15px; border-radius: 20px; font-size: 13px; direction: ltr; text-align: left; font-family: monospace; }
+.address-bar-row {
+    display:flex; gap:10px;
+    padding:5px 15px;
+    background:#000;
+}
+.nav-btn {
+    width:30px; height:30px;
+    border-radius:50%;
+    background:#111;
+    border:1px solid #333;
+    color:#aaa;
+    cursor:pointer;
+}
+.nav-btn:hover { background:#333; color:#fff; }
 
-        /* --- תוכן --- */
-        #content-area { flex-grow: 1; position: relative; overflow: hidden; background: #000; }
-        .page-content { width: 100%; height: 100%; display: none; flex-direction: column; position: relative; }
-        .page-content.active { display: flex; }
+.url-input {
+    flex:1;
+    background:#111;
+    border:1px solid #333;
+    border-radius:20px;
+    padding:6px 15px;
+    color:#0f0;
+    font-family:monospace;
+    direction:ltr;
+}
 
-        /* --- מסך הבית --- */
-        .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: white; background: #000; z-index: 5; position: relative; }
-        
-        .logo-container { position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        /* הלוגו הגדול שלך במסך הבית */
-        .my-custom-bg-logo {
-            position: absolute; width: 100%; height: 100%; opacity: 0.8;
-            background-image: url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); 
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 0 10px #0f0); /* זוהר ירוק */
-        }
-        .main-icon { font-size: 80px; z-index: 2; opacity: 0; } /* הסתרתי את הנחש כדי שיראו רק את הלוגו שלך */
+#content-area { flex:1; position:relative; }
+.page-content { display:none; width:100%; height:100%; }
+.page-content.active { display:flex; }
 
-        .big-search-box { 
-            width: 500px; padding: 15px 25px; border-radius: 30px; 
-            background: #111; border: 1px solid #333; color: white; font-size: 16px; 
-            text-align: center; transition: 0.3s;
-        }
+.home-screen {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+.logo-container {
+    width:150px; height:150px;
+    background:url("https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png") center/contain no-repeat;
+    filter:drop-shadow(0 0 10px #0f0);
+}
+.big-search-box {
+    width:500px;
+    padding:15px;
+    border-radius:30px;
+    background:#111;
+    border:1px solid #333;
+    color:#fff;
+    font-size:16px;
+    text-align:center;
+}
 
-        /* --- Iframe Area --- */
-        .iframe-wrapper {
-            flex-grow: 1; position: relative; overflow: hidden; background: #000; display: none;
-        }
+.iframe-wrapper { flex:1; position:relative; display:none; }
+.iframe-wrapper iframe {
+    width:100%; height:calc(100% + 100px);
+    border:none;
+    position:absolute;
+    top:-100px;
+    filter:invert(1) grayscale(1);
+}
 
-        /* הפילטר המיוחד - הופך הכל לשחור/אפור/ירוק ומעלים צבעים של גוגל */
-        .iframe-wrapper iframe {
-            width: 100%;
-            height: calc(100% + 100px); /* חותך את הלמעלה של גוגל */
-            border: none;
-            position: absolute;
-            top: -100px; 
-            left: 0;
-            background: #fff;
-            filter: invert(1) hue-rotate(180deg) grayscale(1) contrast(1.1); 
-        }
+.fake-google-bar {
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:70px;
+    background:#000;
+    border-bottom:1px solid #222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+}
 
-        /* --- הבר המזויף העליון (מסתיר את החיפוש של גוגל) --- */
-        .fake-google-bar {
-            position: absolute; top: 0; left: 0; width: 100%; height: 70px;
-            background: #000; border-bottom: 1px solid #222; z-index: 20;
-            display: flex; align-items: center; justify-content: center; padding: 0 20px;
-        }
+.fake-search-input-wrapper {
+    width:70%;
+    background:#111;
+    border:1px solid #333;
+    border-radius:25px;
+    padding:10px;
+    display:flex;
+    gap:10px;
+}
+.fake-input {
+    flex:1;
+    background:none;
+    border:none;
+    color:#ddd;
+}
 
-        /* הלוגו שלך בפינה של הבר */
-        .site-brand { position: absolute; right: 20px; display: flex; align-items: center; }
-        .corner-logo {
-            width: 45px; height: 45px;
-            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/fingerprint.png'); 
-            background-size: cover; 
-            filter: drop-shadow(0 0 5px #0f0);
-        }
+.game-mode-btn {
+    background:#333;
+    border:1px solid #444;
+    border-radius:15px;
+    padding:5px 12px;
+    cursor:pointer;
+}
 
-        /* תיבת החיפוש המזויפת */
-        .fake-search-input-wrapper {
-            max-width: 700px; width: 100%; height: 44px;
-            background: #111; border: 1px solid #333; border-radius: 24px;
-            display: flex; align-items: center; padding: 0 15px; gap: 10px;
-        }
-        .fake-input { flex-grow: 1; border: none; outline: none; font-size: 14px; color: #ddd; background: transparent; }
+.exit-game-btn {
+    position:absolute;
+    top:10px; right:20px;
+    background:#000;
+    color:#fff;
+    border:1px solid #fff;
+    border-radius:20px;
+    padding:5px 15px;
+    cursor:pointer;
+    display:none;
+    z-index:50;
+}
 
-        /* --- הפס התחתון שמסתיר את הלוגו של גוגל למטה --- */
-        .bottom-hider-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px; /* הגובה של ההסתרה */
-            background: #000;
-            z-index: 50; /* מעל הכל */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid #222;
-            color: #444;
-            font-size: 12px;
-            pointer-events: none; /* כדי שאפשר יהיה ללחוץ דרכו במקרה הצורך, אם כי זה מסתיר ויזואלית */
-        }
-
-        /* --- סימן מים קבוע ברקע (הלוגו שלך) --- */
-        .persistent-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background-image: url('https://img.icons8.com/ios-filled/300/ffffff/fingerprint.png'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.05; /* שקוף מאוד */
-            pointer-events: none;
-            z-index: 15; /* מעל האייפריים אבל מתחת לבר */
-        }
-
-        .game-mode-btn { background: #333; color: #fff; padding: 5px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; border: 1px solid #444; }
-        
-        .exit-game-btn {
-            position: absolute; top: 10px; right: 20px; z-index: 100;
-            background: rgba(0,0,0,0.8); color: #fff; padding: 5px 15px; border-radius: 20px;
-            cursor: pointer; display: none; border: 1px solid #fff; font-weight: bold;
-        }
-        .iframe-wrapper.game-mode .exit-game-btn { display: block; }
-        .iframe-wrapper.game-mode iframe { top: 0 !important; height: 100% !important; filter: none; }
-        .iframe-wrapper.game-mode .fake-google-bar { top: -100px; }
-        .iframe-wrapper.game-mode .bottom-hider-bar { display: none; } /* במצב משחק לא צריך להסתיר למטה */
-
-    </style>
+.iframe-wrapper.game-mode iframe {
+    top:0; height:100%; filter:none;
+}
+.iframe-wrapper.game-mode .fake-google-bar { display:none; }
+.iframe-wrapper.game-mode .exit-game-btn { display:block; }
+</style>
 </head>
+
 <body>
 
-    <div class="admin-header">
-        <div class="brand">SNAKE OS</div>
-        <div class="clock-display" id="real-time-clock">00:00:00</div>
-        <div></div>
+<div class="admin-header">
+    <div class="brand">SNAKE OS</div>
+    <div class="clock-display" id="real-time-clock"></div>
+    <div></div>
+</div>
+
+<div class="nav-container">
+    <div class="tabs-row">
+        <div id="tabs-list" style="display:flex; gap:5px;"></div>
+        <div class="add-tab-btn" onclick="openNewTab()">+</div>
+    </div>
+    <div class="address-bar-row">
+        <button class="nav-btn" onclick="goBack()">➜</button>
+        <button class="nav-btn" style="transform:scaleX(-1)" onclick="goForward()">➜</button>
+        <button class="nav-btn" onclick="doRefresh()">↻</button>
+        <input id="url-bar" class="url-input" placeholder="חיפוש..."
+        onkeypress="if(event.key==='Enter') performSearch(this.value)">
+    </div>
+</div>
+
+<div id="content-area"></div>
+
+<script>
+function updateClock(){
+    document.getElementById("real-time-clock").innerText =
+    new Date().toLocaleTimeString("he-IL");
+}
+setInterval(updateClock,1000); updateClock();
+
+let tabCounter=0, activeTabId=null;
+let historyStack={}, historyIndex={};
+
+function openNewTab(){
+    tabCounter++;
+    const tabId="tab-"+tabCounter;
+    const contentId="content-"+tabCounter;
+
+    historyStack[tabId]=["home"];
+    historyIndex[tabId]=0;
+
+    const tab=document.createElement("div");
+    tab.className="tab";
+    tab.id=tabId;
+    tab.innerHTML=`<span>New Tab</span> <span class="close-tab" onclick="closeTab(event,'${tabId}')">×</span>`;
+    tab.onclick=()=>switchToTab(tabId);
+    document.getElementById("tabs-list").appendChild(tab);
+
+    const content=document.createElement("div");
+    content.className="page-content";
+    content.id=contentId;
+    content.innerHTML=`
+    <div class="home-screen">
+        <div class="logo-container"></div>
+        <input class="big-search-box" placeholder="Search..."
+        onkeypress="if(event.key==='Enter') performSearch(this.value)">
     </div>
 
-    <div class="nav-container">
-        <div class="tabs-row">
-            <div id="tabs-list" style="display:flex; gap:5px; align-items:flex-end;"></div>
-            <div class="add-tab-btn" onclick="openNewTab()">+</div>
+    <div class="iframe-wrapper">
+        <div class="exit-game-btn" onclick="toggleGameMode('${contentId}',false)">EXIT</div>
+        <div class="fake-google-bar">
+            <div class="fake-search-input-wrapper">
+                <input class="fake-input" placeholder="Search..."
+                onkeypress="if(event.key==='Enter') performSearch(this.value)">
+                <div class="game-mode-btn" onclick="toggleGameMode('${contentId}',true)">GAME</div>
+            </div>
         </div>
-        <div class="address-bar-row">
-            <button class="nav-btn" onclick="goBack()">➜</button>
-            <button class="nav-btn" style="transform: scaleX(-1);" onclick="goForward()">➜</button>
-            <button class="nav-btn" onclick="doRefresh()">↻</button>
-            <input type="text" class="url-input" id="url-bar" placeholder="חיפוש..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
-        </div>
-    </div>
+        <iframe src="about:blank"></iframe>
+    </div>`;
+    document.getElementById("content-area").appendChild(content);
+    switchToTab(tabId);
+}
 
-    <div id="content-area"></div>
+function performSearch(query){
+    if(!activeTabId || !query) return;
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('real-time-clock').innerText = now.toLocaleTimeString('he-IL');
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+    const stack=historyStack[activeTabId];
+    historyStack[activeTabId]=stack.slice(0,historyIndex[activeTabId]+1);
+    historyStack[activeTabId].push(query);
+    historyIndex[activeTabId]++;
 
-        let tabCounter = 0;
-        let activeTabId = null;
-        let historyStack = {}; 
-        let historyIndex = {};
+    loadContent(activeTabId,query);
 
-        function openNewTab() {
-            tabCounter++;
-            const tabId = 'tab-' + tabCounter;
-            const contentId = 'content-' + tabCounter;
-            
-            historyStack[tabId] = ['home'];
-            historyIndex[tabId] = 0;
+    /* 🔥 ניקוי כל שדות החיפוש */
+    document.getElementById("url-bar").value="";
+    document.querySelectorAll(".big-search-box,.fake-input")
+    .forEach(i=>i.value="");
+}
 
-            const tabsList = document.getElementById('tabs-list');
-            const newTab = document.createElement('div');
-            newTab.className = 'tab';
-            newTab.id = tabId;
-            newTab.onclick = () => switchToTab(tabId);
-            newTab.innerHTML = `<span>New Tab</span> <span class="close-tab" onclick="closeTab(event, '${tabId}')">×</span>`;
-            tabsList.appendChild(newTab);
+function loadContent(tabId,query){
+    const content=document.getElementById(tabId.replace("tab-","content-"));
+    const home=content.querySelector(".home-screen");
+    const wrapper=content.querySelector(".iframe-wrapper");
+    const iframe=wrapper.querySelector("iframe");
 
-            const contentArea = document.getElementById('content-area');
-            const newContent = document.createElement('div');
-            newContent.className = 'page-content';
-            newContent.id = contentId;
-            
-            newContent.innerHTML = `
-                <div class="home-screen">
-                    <div class="logo-container">
-                        <div class="my-custom-bg-logo"></div>
-                    </div>
-                    <h1 style="color:#fff; font-weight:300; letter-spacing:2px; margin-top:0;">SECURE ACCESS</h1>
-                    <input type="text" class="big-search-box" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
-                </div>
-                
-                <div class="iframe-wrapper">
-                    <!-- סימן מים קבוע ברקע -->
-                    <div class="persistent-watermark"></div>
+    if(query==="home"){
+        home.style.display="flex";
+        wrapper.style.display="none";
+        return;
+    }
 
-                    <!-- הפס התחתון שמסתיר את הלוגו של גוגל -->
-                    <div class="bottom-hider-bar">SNAKE OS SECURE LAYER</div>
+    home.style.display="none";
+    wrapper.style.display="block";
+    wrapper.classList.remove("game-mode");
 
-                    <div class="exit-game-btn" onclick="toggleGameMode('${contentId}', false)">EXIT FULLSCREEN</div>
+    let url = (query.includes(".") && !query.includes(" "))
+        ? (query.startsWith("http")?query:"https://"+query)
+        : "https://www.google.com/search?q="+encodeURIComponent(query);
 
-                    <div class="fake-google-bar">
-                        <div class="site-brand">
-                            <div class="corner-logo"></div>
-                        </div>
+    iframe.src=url;
+}
 
-                        <div class="fake-search-input-wrapper">
-                            <span style="color:#666">🔎</span>
-                            <input type="text" class="fake-input" onkeypress="if(event.key==='Enter') performSearch(this.value)" placeholder="Search...">
-                            <div class="game-mode-btn" onclick="toggleGameMode('${contentId}', true)">GAME MODE</div>
-                        </div>
-                    </div>
-                    
-                    <iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-pointer-lock"></iframe>
-                </div>
-            `;
-            contentArea.appendChild(newContent);
-            switchToTab(tabId);
-        }
+function toggleGameMode(id,on){
+    const w=document.getElementById(id).querySelector(".iframe-wrapper");
+    on?w.classList.add("game-mode"):w.classList.remove("game-mode");
+}
 
-        function toggleGameMode(contentId, enable) {
-            const wrapper = document.getElementById(contentId).querySelector('.iframe-wrapper');
-            if (enable) wrapper.classList.add('game-mode');
-            else wrapper.classList.remove('game-mode');
-        }
+function switchToTab(id){
+    activeTabId=id;
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".page-content").forEach(c=>c.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.getElementById(id.replace("tab-","content-")).classList.add("active");
+}
 
-        function performSearch(query) {
-            if(!activeTabId || !query) return;
-            const currentStack = historyStack[activeTabId];
-            const currentIndex = historyIndex[activeTabId];
-            if (currentIndex < currentStack.length - 1) {
-                historyStack[activeTabId] = currentStack.slice(0, currentIndex + 1);
-            }
-            historyStack[activeTabId].push(query);
-            historyIndex[activeTabId]++;
-            loadContent(activeTabId, query);
-        }
+function closeTab(e,id){
+    e.stopPropagation();
+    if(document.querySelectorAll(".tab").length===1) return;
+    document.getElementById(id.replace("tab-","content-")).remove();
+    document.getElementById(id).remove();
+    delete historyStack[id]; delete historyIndex[id];
+}
 
-        function loadContent(tabId, query) {
-            const contentId = tabId.replace('tab-', 'content-');
-            const contentDiv = document.getElementById(contentId);
-            const home = contentDiv.querySelector('.home-screen');
-            const wrapper = contentDiv.querySelector('.iframe-wrapper');
-            const iframe = wrapper.querySelector('iframe');
-            const fakeInput = wrapper.querySelector('.fake-input');
+function goBack(){
+    if(historyIndex[activeTabId]>0){
+        historyIndex[activeTabId]--;
+        loadContent(activeTabId,historyStack[activeTabId][historyIndex[activeTabId]]);
+    }
+}
+function goForward(){
+    if(historyIndex[activeTabId]<historyStack[activeTabId].length-1){
+        historyIndex[activeTabId]++;
+        loadContent(activeTabId,historyStack[activeTabId][historyIndex[activeTabId]]);
+    }
+}
+function doRefresh(){
+    const iframe=document.getElementById(activeTabId.replace("tab-","content-"))
+    .querySelector("iframe");
+    iframe.src=iframe.src;
+}
 
-            if (query === 'home') {
-                home.style.display = 'flex';
-                wrapper.style.display = 'none';
-                document.getElementById('url-bar').value = '';
-                document.querySelector(`#${tabId} span`).innerText = 'דף הבית';
-                return;
-            }
-
-            home.style.display = 'none';
-            wrapper.style.display = 'block';
-            wrapper.classList.remove('game-mode');
-
-            let url = "";
-            if (query.indexOf('.') > -1 && query.indexOf(' ') === -1) {
-                url = query.startsWith('http') ? query : 'https://' + query;
-                wrapper.classList.add('game-mode'); 
-            } else {
-                url = "https://www.google.com/search?igu=1&q=" + encodeURIComponent(query);
-            }
-
-            if(iframe.src !== url) iframe.src = url;
-
-            const tabTitle = document.querySelector(`#${tabId} span`);
-            tabTitle.innerText = query.length > 15 ? query.substring(0, 15) + '...' : query;
-            if(activeTabId === tabId) document.getElementById('url-bar').value = query;
-            if(fakeInput) fakeInput.value = query;
-        }
-
-        function goBack() {
-            if (!activeTabId) return;
-            if (historyIndex[activeTabId] > 0) {
-                historyIndex[activeTabId]--;
-                const query = historyStack[activeTabId][historyIndex[activeTabId]];
-                loadContent(activeTabId, query);
-            }
-        }
-
-        function goForward() {
-            if (!activeTabId) return;
-            if (historyIndex[activeTabId] < historyStack[activeTabId].length - 1) {
-                historyIndex[activeTabId]++;
-                const query = historyStack[activeTabId][historyIndex[activeTabId]];
-                loadContent(activeTabId, query);
-            }
-        }
-
-        function switchToTab(tabId) {
-            activeTabId = tabId;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.page-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const contentId = tabId.replace('tab-', 'content-');
-            document.getElementById(contentId).classList.add('active');
-            const currentIndex = historyIndex[tabId];
-            const currentQuery = historyStack[tabId][currentIndex];
-            document.getElementById('url-bar').value = (currentQuery === 'home') ? '' : currentQuery;
-        }
-
-        function closeTab(e, tabId) {
-            e.stopPropagation();
-            if (document.querySelectorAll('.tab').length === 1) { alert("Cannot close last tab"); return; }
-            const tab = document.getElementById(tabId);
-            if (tab.classList.contains('active')) {
-                const sibling = tab.previousElementSibling || tab.nextElementSibling;
-                if(sibling && sibling.id !== 'tabs-list') sibling.click();
-                else document.querySelector('.tab:not(#'+tabId+')').click();
-            }
-            tab.remove();
-            document.getElementById(tabId.replace('tab-', 'content-')).remove();
-            delete historyStack[tabId];
-            delete historyIndex[tabId];
-        }
-
-        function doRefresh() {
-            if(activeTabId) {
-                const iframe = document.getElementById(activeTabId.replace('tab-', 'content-')).querySelector('iframe');
-                if (iframe.style.display !== 'none') iframe.src = iframe.src;
-            }
-        }
-
-        openNewTab();
-    </script>
+openNewTab();
+</script>
 </body>
 </html>
