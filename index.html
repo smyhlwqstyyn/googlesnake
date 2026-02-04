@@ -32,37 +32,36 @@ body, html { margin:0; padding:0; height:100%; background:#000; font-family:'Seg
 .home-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:white; background:#000; z-index:5; position:relative; }
 .logo-container { position:relative; width:150px; height:150px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
 .my-custom-bg-logo { position:absolute; width:100%; height:100%; opacity:0.8; background-image:url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); background-size:contain; background-repeat:no-repeat; background-position:center; filter:drop-shadow(0 0 10px #0f0); }
-.big-search-box { width:500px; padding:15px 25px; border-radius:30px; background:#111; border:1px solid #333; color:white; font-size:16px; text-align:center; transition:0.3s; }
-
-.search-options { position:absolute; top:60%; left:50%; transform:translateX(-50%); width:500px; max-height:200px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:10px; display:none; flex-direction:column; z-index:50; }
-.search-option { padding:8px 12px; cursor:pointer; color:#ddd; border-bottom:1px solid #222; }
-.search-option:hover { background:#222; }
+.big-search-box { width:500px; padding:15px 25px; border-radius:30px; background:#111; border:1px solid #333; color:white; font-size:16px; text-align:center; transition:0.3s; cursor:text; }
 
 .persistent-watermark { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:300px; height:300px; background-image:url('https://img.icons8.com/ios-filled/300/ffffff/fingerprint.png'); background-size:contain; background-repeat:no-repeat; opacity:0.05; pointer-events:none; z-index:15; }
 
-.game-mode-btn { background:#333; color:#fff; padding:5px 12px; border-radius:15px; font-size:12px; cursor:pointer; border:1px solid #444; }
-.exit-game-btn { position:absolute; top:10px; right:20px; z-index:100; background:rgba(0,0,0,0.8); color:#fff; padding:5px 15px; border-radius:20px; cursor:pointer; display:none; border:1px solid #fff; font-weight:bold; }
+.results-page { flex-grow:1; display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:40px; background:#000; color:#0f0; overflow-y:auto; }
+.results-page h2 { margin-bottom:20px; }
+.result-item { width:500px; padding:10px; margin-bottom:8px; border:1px solid #222; border-radius:10px; cursor:pointer; color:#0f0; text-decoration:none; display:block; }
+.result-item:hover { background:#111; }
+
 </style>
 </head>
 <body>
 
 <div class="admin-header">
-<div class="brand">SNAKE OS</div>
-<div class="clock-display" id="real-time-clock">00:00:00</div>
-<div></div>
+    <div class="brand">SNAKE OS</div>
+    <div class="clock-display" id="real-time-clock">00:00:00</div>
+    <div></div>
 </div>
 
 <div class="nav-container">
-<div class="tabs-row">
-<div id="tabs-list" style="display:flex; gap:5px; align-items:flex-end;"></div>
-<div class="add-tab-btn" onclick="openNewTab()">+</div>
-</div>
-<div class="address-bar-row">
-<button class="nav-btn" onclick="goBack()">➜</button>
-<button class="nav-btn" style="transform: scaleX(-1);" onclick="goForward()">➜</button>
-<button class="nav-btn" onclick="doRefresh()">↻</button>
-<input type="text" class="url-input" id="url-bar" placeholder="חיפוש..." oninput="updateSearchOptions(this.value)" onkeypress="if(event.key==='Enter') selectFirstOption()">
-</div>
+    <div class="tabs-row">
+        <div id="tabs-list" style="display:flex; gap:5px; align-items:flex-end;"></div>
+        <div class="add-tab-btn" onclick="openNewTab()">+</div>
+    </div>
+    <div class="address-bar-row">
+        <button class="nav-btn" onclick="goBack()">➜</button>
+        <button class="nav-btn" style="transform: scaleX(-1);" onclick="goForward()">➜</button>
+        <button class="nav-btn" onclick="doRefresh()">↻</button>
+        <input type="text" class="url-input" id="url-bar" placeholder="חיפוש..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+    </div>
 </div>
 
 <div id="content-area"></div>
@@ -97,12 +96,10 @@ function openNewTab(){
     newContent.innerHTML=`
         <div class="home-screen">
             <div class="logo-container"><div class="my-custom-bg-logo"></div></div>
-            <input type="text" class="big-search-box" placeholder="Search..." oninput="updateSearchOptions(this.value)" onkeypress="if(event.key==='Enter') selectFirstOption()">
+            <input type="text" class="big-search-box" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
         </div>
         <div class="persistent-watermark"></div>
-        <div class="exit-game-btn" onclick="toggleGameMode('${contentId}', false)">EXIT FULLSCREEN</div>
-        <div class="search-options"></div>
-        <div class="results-area" style="position:absolute;top:60%;left:50%;transform:translateX(-50%);width:500px;color:#0f0;"></div>
+        <div class="results-page"></div>
     `;
     contentArea.appendChild(newContent);
     switchToTab(tabId);
@@ -132,54 +129,15 @@ function closeTab(e,tabId){
 }
 
 function doRefresh(){}
-function toggleGameMode(contentId,enable){
-    const wrapper=document.getElementById(contentId);
-    if(enable) wrapper.classList.add('game-mode');
-    else wrapper.classList.remove('game-mode');
-}
 
 // חיפוש פנימי
-const internalHistory=[];
-function updateSearchOptions(value){
+function performSearch(value){
+    if(!value) return;
     const content=document.querySelector('.page-content.active');
-    const optionsDiv=content.querySelector('.search-options');
-    const resultsDiv=content.querySelector('.results-area');
-    resultsDiv.innerHTML='';
-    if(!value){ optionsDiv.style.display='none'; return; }
-
-    const examples=['בדיקה 1','בדיקה 2','בדיקה 3','חיפוש פנימי','אפשרות מיוחדת'];
-    const allOptions=[...internalHistory,...examples];
-
-    optionsDiv.innerHTML='';
-    allOptions.forEach(opt=>{
-        if(opt.includes(value)){
-            const div=document.createElement('div');
-            div.className='search-option';
-            div.innerText=opt;
-            div.onclick=()=>selectOption(opt);
-            optionsDiv.appendChild(div);
-        }
-    });
-    optionsDiv.style.display=optionsDiv.children.length>0?'flex':'none';
-}
-
-function selectOption(opt){
-    const content=document.querySelector('.page-content.active');
-    const input=content.querySelector('.big-search-box');
-    const resultsDiv=content.querySelector('.results-area');
-    input.value=opt;
-    content.querySelector('.search-options').style.display='none';
-    resultsDiv.innerHTML=`<div>${opt}</div>`; // מציג את התוצאה פנימית במקום גוגל
-    if(!internalHistory.includes(opt)) internalHistory.push(opt);
-}
-
-function selectFirstOption(){
-    const content=document.querySelector('.page-content.active');
-    const options=content.querySelectorAll('.search-option');
-    if(options.length>0) options[0].click();
-}
-
-openNewTab();
-</script>
-</body>
-</html>
+    const home=content.querySelector('.home-screen');
+    const resultsDiv=content.querySelector('.results-page');
+    home.style.display='none';
+    resultsDiv.style.display='flex';
+    resultsDiv.innerHTML=`<h2>תוצאות חיפוש עבור: "${value}"</h2>`;
+    
+    
