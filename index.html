@@ -41,6 +41,13 @@ body, html { margin:0; padding:0; height:100%; background:#000; font-family:'Seg
 .result-item { width:500px; padding:10px; margin-bottom:8px; border:1px solid #222; border-radius:10px; cursor:pointer; color:#0f0; text-decoration:none; display:block; }
 .result-item:hover { background:#111; }
 
+.result-content { display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding:40px; background:#000; color:#0f0; height:100%; overflow-y:auto; }
+.result-content h2 { margin-bottom:15px; }
+.result-content p { margin-bottom:20px; }
+.result-content img { max-width:500px; margin-bottom:20px; border:1px solid #222; border-radius:10px; }
+.back-btn { background:#111; color:#0f0; padding:8px 15px; border-radius:10px; cursor:pointer; margin-bottom:20px; border:1px solid #0f0; }
+.back-btn:hover { background:#222; }
+
 </style>
 </head>
 <body>
@@ -100,6 +107,7 @@ function openNewTab(){
         </div>
         <div class="persistent-watermark"></div>
         <div class="results-page"></div>
+        <div class="result-content"></div>
     `;
     contentArea.appendChild(newContent);
     switchToTab(tabId);
@@ -130,14 +138,64 @@ function closeTab(e,tabId){
 
 function doRefresh(){}
 
-// חיפוש פנימי
+// חיפוש פנימי עם דפי תוכן
 function performSearch(value){
     if(!value) return;
     const content=document.querySelector('.page-content.active');
     const home=content.querySelector('.home-screen');
     const resultsDiv=content.querySelector('.results-page');
+    const contentDiv=content.querySelector('.result-content');
+
     home.style.display='none';
+    contentDiv.style.display='none';
     resultsDiv.style.display='flex';
     resultsDiv.innerHTML=`<h2>תוצאות חיפוש עבור: "${value}"</h2>`;
-    
-    
+
+    // דוגמאות תוצאות
+    const results=[
+        {title:value+' - אפשרות 1', description:'תיאור אפשרות 1', img:'https://via.placeholder.com/400x200', contentId:'c1'},
+        {title:value+' - אפשרות 2', description:'תיאור אפשרות 2', img:'https://via.placeholder.com/400x200', contentId:'c2'},
+        {title:value+' - אפשרות 3', description:'תיאור אפשרות 3', img:'https://via.placeholder.com/400x200', contentId:'c3'},
+    ];
+
+    results.forEach(r=>{
+        const a=document.createElement('a');
+        a.href='#';
+        a.className='result-item';
+        a.innerText=r.title;
+        a.onclick=(e)=>{
+            e.preventDefault();
+            showResultContent(r);
+        };
+        resultsDiv.appendChild(a);
+    });
+}
+
+function showResultContent(result){
+    const content=document.querySelector('.page-content.active');
+    const resultsDiv=content.querySelector('.results-page');
+    const contentDiv=content.querySelector('.result-content');
+
+    resultsDiv.style.display='none';
+    contentDiv.style.display='flex';
+    contentDiv.innerHTML=`
+        <div class="back-btn" onclick="backToResults()">חזור לתוצאות</div>
+        <h2>${result.title}</h2>
+        <p>${result.description}</p>
+        <img src="${result.img}" alt="${result.title}">
+    `;
+}
+
+function backToResults(){
+    const content=document.querySelector('.page-content.active');
+    const resultsDiv=content.querySelector('.results-page');
+    const contentDiv=content.querySelector('.result-content');
+
+    contentDiv.style.display='none';
+    resultsDiv.style.display='flex';
+}
+
+openNewTab();
+</script>
+</body>
+</html>
