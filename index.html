@@ -1,54 +1,90 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>SNAKE OS - ULTIMATE BLACK</title>
-<link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
-<style>
-body, html { margin:0; padding:0; height:100%; background:#000; font-family:'Segoe UI', sans-serif; overflow:hidden; color:#e0e0e0; display:flex; flex-direction:column; }
-* { box-sizing:border-box; outline:none; }
+    <meta charset="UTF-8">
+    <title>SNAKE OS - PRIVATE DB</title>
+    <link rel="icon" href="https://img.icons8.com/emoji/48/snake-emoji.png">
+    <style>
+        /* --- עיצוב כללי שחור --- */
+        body, html { margin:0; padding:0; height:100%; width:100%; background:#000; font-family:'Segoe UI', sans-serif; overflow:hidden; color:#e0e0e0; display:flex; flex-direction:column; }
+        * { box-sizing:border-box; outline:none; }
 
-.admin-header { background:#050505; border-bottom:1px solid #333; height:40px; display:flex; align-items:center; padding:0 15px; justify-content:space-between; z-index:200; }
-.brand { color:#fff; font-weight:bold; font-size:16px; display:flex; align-items:center; gap:10px; opacity:0.8; }
-.clock-display { font-family:'Courier New', monospace; font-size:16px; color:#0f0; text-shadow:0 0 5px #0f0; position:absolute; left:50%; transform:translateX(-50%); }
+        /* סרגל עליון */
+        .admin-header { background:#050505; border-bottom:1px solid #333; height:40px; min-height:40px; display:flex; align-items:center; padding:0 15px; justify-content:space-between; z-index:200; }
+        .brand { color:#fff; font-weight:bold; font-size:16px; display:flex; align-items:center; gap:10px; opacity:0.8; }
+        .clock-display { font-family:'Courier New', monospace; font-size:16px; color:#0f0; text-shadow:0 0 5px #0f0; position:absolute; left:50%; transform:translateX(-50%); }
 
-.nav-container { background:#080808; border-bottom:1px solid #222; display:flex; flex-direction:column; padding-top:5px; }
-.tabs-row { display:flex; align-items:flex-end; padding:0 10px; gap:5px; height:30px; }
-.tab { background:#1a1a1a; color:#666; padding:2px 15px; border-radius:8px 8px 0 0; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:8px; max-width:150px; border:1px solid #222; border-bottom:none; }
-.tab.active { background:#000; color:#fff; height:31px; border-top:2px solid #0f0; border-bottom:1px solid #000; z-index:10; }
-.close-tab { font-size:14px; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
-.close-tab:hover { color:#f00; }
-.add-tab-btn { color:#444; font-size:20px; cursor:pointer; padding:0 10px; font-weight:bold; }
+        /* ניווט */
+        .nav-container { background:#080808; border-bottom:1px solid #222; display:flex; flex-direction:column; padding-top:5px; flex-shrink: 0; }
+        .tabs-row { display:flex; align-items:flex-end; padding:0 10px; gap:5px; height:30px; }
+        .tab { background:#1a1a1a; color:#666; padding:2px 15px; border-radius:8px 8px 0 0; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:8px; max-width:150px; border:1px solid #222; border-bottom:none; user-select: none; }
+        .tab.active { background:#000; color:#fff; height:31px; border-top:2px solid #0f0; border-bottom:1px solid #000; z-index:10; }
+        .close-tab { font-size:14px; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
+        .close-tab:hover { color:#f00; }
+        .add-tab-btn { color:#444; font-size:20px; cursor:pointer; padding:0 10px; font-weight:bold; }
 
-.address-bar-row { padding:5px 15px; display:flex; gap:10px; align-items:center; background:#000; border-bottom:1px solid #111; height:50px; }
-.nav-btn { background:#111; border:1px solid #333; color:#aaa; cursor:pointer; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:0.2s; }
-.nav-btn:hover { background:#333; color:#fff; }
-.url-input { flex-grow:1; background:#111; border:1px solid #333; color:#0f0; padding:6px 15px; border-radius:20px; font-size:13px; direction:ltr; text-align:left; font-family:monospace; }
+        .address-bar-row { padding:5px 15px; display:flex; gap:10px; align-items:center; background:#000; border-bottom:1px solid #111; height:50px; }
+        .nav-btn { background:#111; border:1px solid #333; color:#aaa; cursor:pointer; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:0.2s; }
+        .nav-btn:hover { background:#333; color:#fff; }
+        .url-input { flex-grow:1; background:#111; border:1px solid #333; color:#0f0; padding:6px 15px; border-radius:20px; font-size:13px; direction:ltr; text-align:left; font-family:monospace; }
 
-#content-area { flex-grow:1; position:relative; overflow:hidden; background:#000; }
-.page-content { width:100%; height:100%; display:none; flex-direction:column; position:relative; }
-.page-content.active { display:flex; }
+        /* --- אזור תוכן ראשי --- */
+        #content-area { flex-grow:1; position:relative; width:100%; height:100%; overflow:hidden; background:#000; }
+        .page-content { width:100%; height:100%; display:none; flex-direction:column; position:relative; }
+        .page-content.active { display:flex; }
 
-.home-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:white; background:#000; z-index:5; position:relative; }
-.logo-container { position:relative; width:150px; height:150px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
-.my-custom-bg-logo { position:absolute; width:100%; height:100%; opacity:0.8; background-image:url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); background-size:contain; background-repeat:no-repeat; background-position:center; filter:drop-shadow(0 0 10px #0f0); }
-.big-search-box { width:500px; padding:15px 25px; border-radius:30px; background:#111; border:1px solid #333; color:white; font-size:16px; text-align:center; transition:0.3s; cursor:text; }
+        /* מסך בית */
+        .home-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; width:100%; color:white; background:#000; z-index:5; position:absolute; top:0; left:0; }
+        .logo-container { position:relative; width:150px; height:150px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+        .my-custom-bg-logo { position:absolute; width:100%; height:100%; opacity:0.8; background-image:url('https://img.icons8.com/ios-filled/100/ffffff/fingerprint.png'); background-size:contain; background-repeat:no-repeat; background-position:center; filter:drop-shadow(0 0 10px #0f0); }
+        .big-search-box { width:500px; padding:15px 25px; border-radius:30px; background:#111; border:1px solid #333; color:white; font-size:16px; text-align:center; transition:0.3s; }
+        .big-search-box:focus { border-color: #0f0; box-shadow: 0 0 15px rgba(0,255,0,0.15); }
 
-.persistent-watermark { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:300px; height:300px; background-image:url('https://img.icons8.com/ios-filled/300/ffffff/fingerprint.png'); background-size:contain; background-repeat:no-repeat; opacity:0.05; pointer-events:none; z-index:15; }
+        /* --- אזור התוצאות (סגנון גוגל כהה) --- */
+        .results-container { display:none; flex-direction:column; width:100%; height:100%; padding:20px 100px 20px 20px; overflow-y:auto; align-items:flex-start; position:absolute; top:0; left:0; background:#000; z-index:4; }
+        .results-meta { color: #888; font-size: 13px; margin-bottom: 20px; border-bottom: 1px solid #222; width: 100%; padding-bottom: 10px; }
+        .results-list { width:100%; max-width:700px; display:flex; flex-direction: column; gap:30px; }
+        
+        .result-item { display: flex; flex-direction: row; justify-content: space-between; text-decoration: none; cursor: pointer; padding-bottom: 10px; }
+        .result-main { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .result-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .result-favicon { width: 16px; height: 16px; border-radius: 50%; background: #222; }
+        .result-site-name { font-size: 14px; color: #dadce0; }
+        .result-link { font-size: 12px; color: #9aa0a6; }
+        .result-title { font-size: 20px; color: #8ab4f8; font-weight: normal; line-height: 1.3; text-decoration: none; }
+        .result-title:hover { text-decoration: underline; }
+        .result-desc { font-size: 14px; color: #bdc1c6; line-height: 1.58; margin-top: 3px; max-width: 600px;}
+        .result-thumb { width: 104px; height: 104px; border-radius: 8px; overflow: hidden; margin-right: 20px; flex-shrink: 0; background: #111; border: 1px solid #333; }
+        .result-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-.results-page { flex-grow:1; display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:40px; background:#000; color:#0f0; overflow-y:auto; }
-.results-page h2 { margin-bottom:20px; }
-.result-item { width:500px; padding:10px; margin-bottom:8px; border:1px solid #222; border-radius:10px; cursor:pointer; color:#0f0; text-decoration:none; display:block; }
-.result-item:hover { background:#111; }
+        /* --- כפתור עיפרון --- */
+        .pencil-btn { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; border-radius: 50%; background: #0f0; color: #000; display: none; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 0 20px rgba(0,255,0,0.4); cursor: pointer; z-index: 100; transition: 0.3s; }
+        .pencil-btn:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(0,255,0,0.6); }
 
-.result-content { display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding:40px; background:#000; color:#0f0; height:100%; overflow-y:auto; }
-.result-content h2 { margin-bottom:15px; }
-.result-content p { margin-bottom:20px; }
-.result-content img { max-width:500px; margin-bottom:20px; border:1px solid #222; border-radius:10px; }
-.back-btn { background:#111; color:#0f0; padding:8px 15px; border-radius:10px; cursor:pointer; margin-bottom:20px; border:1px solid #0f0; }
-.back-btn:hover { background:#222; }
+        /* --- Iframe (המסך המלא) --- */
+        .iframe-wrapper { 
+            display: none; 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000; 
+            z-index: 50; 
+        }
+        .iframe-wrapper iframe { 
+            width: 100%; height: 100%; 
+            border: none; 
+            display: block; 
+        }
 
-</style>
+        /* --- חלונות קופצים --- */
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:300; display:none; align-items:center; justify-content:center; }
+        .modal-box { background:#111; border:1px solid #0f0; padding:20px; width:500px; border-radius:15px; display:flex; flex-direction:column; gap:15px; position:relative; box-shadow: 0 0 20px rgba(0,255,0,0.2); }
+        .modal-title { color:#0f0; font-size:20px; text-align:center; margin-bottom:10px; }
+        .modal-label { color:#aaa; font-size:12px; margin-bottom:-8px; margin-top: 5px;}
+        .modal-input { background:#222; border:1px solid #444; color:#fff; padding:10px; border-radius:5px; width:100%; font-family:inherit; }
+        .modal-btn { background:#0f0; color:#000; border:none; padding:10px; border-radius:5px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        .modal-btn:hover { background:#0c0; }
+        .close-modal { position:absolute; top:10px; left:10px; cursor:pointer; color:#666; font-size:20px; }
+    </style>
 </head>
 <body>
 
@@ -64,138 +100,342 @@ body, html { margin:0; padding:0; height:100%; background:#000; font-family:'Seg
         <div class="add-tab-btn" onclick="openNewTab()">+</div>
     </div>
     <div class="address-bar-row">
-        <button class="nav-btn" onclick="goBack()">➜</button>
+        <button class="nav-btn" onclick="goBack()" title="חזור">➜</button>
         <button class="nav-btn" style="transform: scaleX(-1);" onclick="goForward()">➜</button>
-        <button class="nav-btn" onclick="doRefresh()">↻</button>
-        <input type="text" class="url-input" id="url-bar" placeholder="חיפוש..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
+        <button class="nav-btn" onclick="doRefresh()" title="רענן">↻</button>
+        <input type="text" class="url-input" id="url-bar" placeholder="חפש במאגר שלך..." 
+               onkeypress="if(event.key==='Enter') performSearch(this.value)">
     </div>
 </div>
 
 <div id="content-area"></div>
+<div class="pencil-btn" id="pencil-btn" onclick="openAddContentModal()">✎</div>
+
+<!-- חלונות הוספה -->
+<div class="modal-overlay" id="modal-step-1">
+    <div class="modal-box">
+        <span class="close-modal" onclick="closeModals()">✖</span>
+        <div class="modal-title">שלב 1: קישורים</div>
+        <div class="modal-label">קישור לאתר/משחק (הדבק כאן קישור יוטיוב רגיל!):</div>
+        <input type="text" id="new-site-url" class="modal-input" placeholder="https://www.youtube.com/watch?v=...">
+        <div class="modal-label">קישור לתמונה:</div>
+        <input type="text" id="new-image-url" class="modal-input" placeholder="https://example.com/image.jpg">
+        <button class="modal-btn" onclick="goToStep2()">המשך</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-step-2">
+    <div class="modal-box">
+        <span class="close-modal" onclick="closeModals()">✖</span>
+        <div class="modal-title">שלב 2: טקסט</div>
+        <div class="modal-label">כותרת:</div>
+        <input type="text" id="new-title" class="modal-input" placeholder="שם המשחק">
+        <div class="modal-label">תיאור:</div>
+        <input type="text" id="new-desc" class="modal-input" placeholder="תיאור קצר...">
+        <button class="modal-btn" onclick="goToStep3()">המשך</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-step-3">
+    <div class="modal-box">
+        <span class="close-modal" onclick="closeModals()">✖</span>
+        <div class="modal-title">שלב 3: חיפוש</div>
+        <div class="modal-label">מילות מפתח:</div>
+        <input type="text" id="new-keywords" class="modal-input" placeholder="מילה1 מילה2">
+        <button class="modal-btn" onclick="saveNewEntry()">סיום ושמירה</button>
+    </div>
+</div>
 
 <script>
-// שעון
-function updateClock(){ const now=new Date(); document.getElementById('real-time-clock').innerText=now.toLocaleTimeString('he-IL'); }
-setInterval(updateClock,1000); updateClock();
+    function updateClock() { document.getElementById('real-time-clock').innerText=new Date().toLocaleTimeString('he-IL'); }
+    setInterval(updateClock,1000); updateClock();
 
-// טאבים
-let tabCounter=0; let activeTabId=null; let historyStack={}; let historyIndex={};
+    let tabCounter=0;
+    let activeTabId=null;
+    let tabStates = {}; 
 
-function openNewTab(){
-    tabCounter++;
-    const tabId='tab-'+tabCounter;
-    const contentId='content-'+tabCounter;
-    historyStack[tabId]=['home'];
-    historyIndex[tabId]=0;
-
-    const tabsList=document.getElementById('tabs-list');
-    const newTab=document.createElement('div');
-    newTab.className='tab';
-    newTab.id=tabId;
-    newTab.onclick=()=>switchToTab(tabId);
-    newTab.innerHTML=`<span>New Tab</span> <span class="close-tab" onclick="closeTab(event,'${tabId}')">×</span>`;
-    tabsList.appendChild(newTab);
-
-    const contentArea=document.getElementById('content-area');
-    const newContent=document.createElement('div');
-    newContent.className='page-content';
-    newContent.id=contentId;
-    newContent.innerHTML=`
-        <div class="home-screen">
-            <div class="logo-container"><div class="my-custom-bg-logo"></div></div>
-            <input type="text" class="big-search-box" placeholder="Search..." onkeypress="if(event.key==='Enter') performSearch(this.value)">
-        </div>
-        <div class="persistent-watermark"></div>
-        <div class="results-page"></div>
-        <div class="result-content"></div>
-    `;
-    contentArea.appendChild(newContent);
-    switchToTab(tabId);
-}
-
-function switchToTab(tabId){
-    activeTabId=tabId;
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.page-content').forEach(c=>c.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.getElementById('content-'+tabId.replace('tab-','')).classList.add('active');
-}
-
-function closeTab(e,tabId){
-    e.stopPropagation();
-    if(document.querySelectorAll('.tab').length===1){alert("Cannot close last tab"); return;}
-    const tab=document.getElementById(tabId);
-    if(tab.classList.contains('active')){
-        const sibling=tab.previousElementSibling||tab.nextElementSibling;
-        if(sibling&&sibling.id!=='tabs-list') sibling.click();
-        else document.querySelector('.tab:not(#'+tabId+')').click();
-    }
-    tab.remove();
-    document.getElementById(tabId.replace('tab-','content-')).remove();
-    delete historyStack[tabId];
-    delete historyIndex[tabId];
-}
-
-function doRefresh(){}
-
-// חיפוש פנימי עם דפי תוכן
-function performSearch(value){
-    if(!value) return;
-    const content=document.querySelector('.page-content.active');
-    const home=content.querySelector('.home-screen');
-    const resultsDiv=content.querySelector('.results-page');
-    const contentDiv=content.querySelector('.result-content');
-
-    home.style.display='none';
-    contentDiv.style.display='none';
-    resultsDiv.style.display='flex';
-    resultsDiv.innerHTML=`<h2>תוצאות חיפוש עבור: "${value}"</h2>`;
-
-    // דוגמאות תוצאות
-    const results=[
-        {title:value+' - אפשרות 1', description:'תיאור אפשרות 1', img:'https://via.placeholder.com/400x200', contentId:'c1'},
-        {title:value+' - אפשרות 2', description:'תיאור אפשרות 2', img:'https://via.placeholder.com/400x200', contentId:'c2'},
-        {title:value+' - אפשרות 3', description:'תיאור אפשרות 3', img:'https://via.placeholder.com/400x200', contentId:'c3'},
+    let db = JSON.parse(localStorage.getItem('snakeOS_DB_Final_V2')) || [
+        { 
+            siteUrl: "https://classic.minecraft.net", 
+            imageUrl: "https://image.api.playstation.com/vulcan/img/rnd/202010/2119/3s2aZpT8Q1Vn7e5y5h4.png", 
+            title: "Minecraft Classic", 
+            desc: "גרסת הדפדפן הרשמית והחינמית של מיינקראפט קלאסיק.",
+            keywords: "מיינקראפט minecraft משחק" 
+        },
+        {
+            // דוגמה לקישור יוטיוב שעובד
+            siteUrl: "https://www.youtube.com/embed/jfKfPfyJRdk",
+            imageUrl: "https://img.youtube.com/vi/jfKfPfyJRdk/hqdefault.jpg",
+            title: "LoFi Radio",
+            desc: "מוזיקה להירגעות ועבודה (יוטיוב).",
+            keywords: "מוזיקה youtube"
+        }
     ];
 
-    results.forEach(r=>{
-        const a=document.createElement('a');
-        a.href='#';
-        a.className='result-item';
-        a.innerText=r.title;
-        a.onclick=(e)=>{
-            e.preventDefault();
-            showResultContent(r);
-        };
-        resultsDiv.appendChild(a);
-    });
-}
+    function openNewTab(){
+        tabCounter++;
+        const tabId='tab-'+tabCounter;
+        const contentId='content-'+tabCounter;
+        tabStates[tabId] = { view: 'home', query: '', item: null };
 
-function showResultContent(result){
-    const content=document.querySelector('.page-content.active');
-    const resultsDiv=content.querySelector('.results-page');
-    const contentDiv=content.querySelector('.result-content');
+        const tabsList=document.getElementById('tabs-list');
+        const newTab=document.createElement('div');
+        newTab.className='tab';
+        newTab.id=tabId;
+        newTab.onclick=()=>switchToTab(tabId);
+        newTab.innerHTML=`<span>New Tab</span> <span class="close-tab" onclick="closeTab(event,'${tabId}')">×</span>`;
+        tabsList.appendChild(newTab);
 
-    resultsDiv.style.display='none';
-    contentDiv.style.display='flex';
-    contentDiv.innerHTML=`
-        <div class="back-btn" onclick="backToResults()">חזור לתוצאות</div>
-        <h2>${result.title}</h2>
-        <p>${result.description}</p>
-        <img src="${result.img}" alt="${result.title}">
-    `;
-}
+        const contentArea=document.getElementById('content-area');
+        const newContent=document.createElement('div');
+        newContent.className='page-content';
+        newContent.id=contentId;
+        
+        newContent.innerHTML=`
+            <div class="home-screen">
+                <div class="logo-container"><div class="my-custom-bg-logo"></div></div>
+                <input type="text" class="big-search-box" placeholder="חפש במאגר שלך..." 
+                       onkeypress="if(event.key==='Enter') performSearch(this.value)">
+            </div>
+            <div class="results-container">
+                <div class="results-meta">תוצאות חיפוש מהמאגר הפרטי</div>
+                <div class="results-list"></div>
+                <div style="margin-top:40px; color:#555; text-align:center;">
+                    הוסף עוד משחקים עם העיפרון הירוק
+                </div>
+            </div>
+            <div class="iframe-wrapper">
+                 <!-- הוספתי הגדרות חשובות ליוטיוב ולמשחקים -->
+                 <iframe src="about:blank" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-pointer-lock allow-presentation" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        `;
+        contentArea.appendChild(newContent);
+        switchToTab(tabId);
+    }
 
-function backToResults(){
-    const content=document.querySelector('.page-content.active');
-    const resultsDiv=content.querySelector('.results-page');
-    const contentDiv=content.querySelector('.result-content');
+    function switchToTab(tabId){
+        activeTabId=tabId;
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.page-content').forEach(c=>c.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        document.getElementById(tabId.replace('tab-','content-')).classList.add('active');
+        updateUI();
+    }
 
-    contentDiv.style.display='none';
-    resultsDiv.style.display='flex';
-}
+    function closeTab(e,tabId){
+        e.stopPropagation();
+        if(document.querySelectorAll('.tab').length===1) return;
+        const tab=document.getElementById(tabId);
+        if(tab.classList.contains('active')){
+            const sibling=tab.previousElementSibling||tab.nextElementSibling;
+            if(sibling&&sibling.id!=='tabs-list') sibling.click();
+            else document.querySelector('.tab:not(#'+tabId+')').click();
+        }
+        tab.remove();
+        document.getElementById(tabId.replace('tab-','content-')).remove();
+        delete tabStates[tabId];
+    }
 
-openNewTab();
+    function updateUI() {
+        if(!activeTabId) return;
+        const state = tabStates[activeTabId];
+        const content = document.getElementById(activeTabId.replace('tab-','content-'));
+        
+        const home = content.querySelector('.home-screen');
+        const results = content.querySelector('.results-container');
+        const iframe = content.querySelector('.iframe-wrapper');
+        const pencil = document.getElementById('pencil-btn');
+
+        home.style.display = 'none';
+        results.style.display = 'none';
+        iframe.style.display = 'none';
+        pencil.style.display = 'none';
+
+        if (state.view === 'home') {
+            home.style.display = 'flex';
+        } else if (state.view === 'results') {
+            results.style.display = 'flex';
+            pencil.style.display = 'flex';
+            renderResults(content, state.query);
+        } else if (state.view === 'site') {
+            iframe.style.display = 'block'; 
+            const frame = iframe.querySelector('iframe');
+            if(state.item && frame.src !== state.item.siteUrl) {
+                frame.src = state.item.siteUrl;
+            }
+        }
+    }
+
+    function performSearch(query) {
+        if(!activeTabId || !query) return;
+        tabStates[activeTabId].view = 'results';
+        tabStates[activeTabId].query = query;
+        updateUI();
+        document.getElementById('url-bar').value = query;
+    }
+
+    function renderResults(content, query) {
+        const list = content.querySelector('.results-list');
+        list.innerHTML = '';
+        
+        let matches = db.filter(item => item.keywords.includes(query) || item.title.includes(query));
+
+        if (matches.length === 0) {
+            list.innerHTML = '<div style="color:#666;">לא נמצאו תוצאות במאגר.</div>';
+        } else {
+            matches.forEach(item => {
+                const card = createResultCard(item);
+                list.appendChild(card);
+            });
+        }
+    }
+
+    function createResultCard(item) {
+        let domain = "site";
+        try { domain = new URL(item.siteUrl).hostname; } catch(e){}
+        const imgUrl = item.imageUrl || 'https://via.placeholder.com/100/000000/FFFFFF/?text=IMG';
+
+        const card = document.createElement('div');
+        card.className = 'result-item';
+        card.innerHTML = `
+            <div class="result-main">
+                <div class="result-header">
+                    <div class="result-favicon">
+                        <img src="https://www.google.com/s2/favicons?sz=64&domain=${domain}" style="width:100%;height:100%;border-radius:50%;" onerror="this.style.display='none'">
+                    </div>
+                    <div>
+                        <div class="result-site-name">${item.title.split(' ')[0]}</div>
+                        <div class="result-link">${item.siteUrl.substring(0, 40)}...</div>
+                    </div>
+                </div>
+                <div class="result-title">${item.title}</div>
+                <div class="result-desc">${item.desc}</div>
+            </div>
+            <div class="result-thumb">
+                <img src="${imgUrl}" onerror="this.style.display='none'">
+            </div>
+        `;
+        card.onclick = () => openSite(item);
+        return card;
+    }
+
+    function openSite(item) {
+        tabStates[activeTabId].view = 'site';
+        tabStates[activeTabId].item = item;
+        updateUI();
+    }
+
+    function goBack() {
+        if(!activeTabId) return;
+        const state = tabStates[activeTabId];
+        
+        if (state.view === 'site') {
+            state.view = 'results';
+            const content = document.getElementById(activeTabId.replace('tab-','content-'));
+            content.querySelector('iframe').src = 'about:blank';
+        } 
+        else if (state.view === 'results') {
+            state.view = 'home';
+            document.getElementById('url-bar').value = '';
+        }
+        updateUI();
+    }
+    
+    function goForward() {}
+    function doRefresh() {
+        if(!activeTabId) return;
+        const state = tabStates[activeTabId];
+        if (state.view === 'site') {
+            const iframe = document.getElementById(activeTabId.replace('tab-','content-')).querySelector('iframe');
+            iframe.src = iframe.src;
+        } else {
+            performSearch(state.query);
+        }
+    }
+
+    // --- המרה אוטומטית לקישורי יוטיוב שעובדים ---
+    function fixYouTubeUrl(url) {
+        let videoId = "";
+        
+        // מקרה 1: קישור רגיל youtube.com/watch?v=...
+        if (url.includes("watch?v=")) {
+            videoId = url.split("v=")[1];
+            // לפעמים יש אחרי ה-ID עוד דברים כמו &list=...
+            const ampersandPosition = videoId.indexOf('&');
+            if(ampersandPosition !== -1) {
+                videoId = videoId.substring(0, ampersandPosition);
+            }
+        } 
+        // מקרה 2: קישור מקוצר youtu.be/...
+        else if (url.includes("youtu.be/")) {
+            videoId = url.split("youtu.be/")[1];
+             const questionMarkPosition = videoId.indexOf('?');
+            if(questionMarkPosition !== -1) {
+                videoId = videoId.substring(0, questionMarkPosition);
+            }
+        }
+        // מקרה 3: קישור embed שכבר קיים (לא עושים כלום)
+        else if (url.includes("youtube.com/embed/")) {
+            return url;
+        }
+
+        // אם מצאנו ID, נחזיר קישור embed תקין
+        if (videoId) {
+            return "https://www.youtube.com/embed/" + videoId;
+        }
+        
+        // אם זה לא יוטיוב, נחזיר את הקישור המקורי
+        return url;
+    }
+
+    function openAddContentModal() {
+        document.getElementById('modal-step-1').style.display = 'flex';
+        document.getElementById('new-site-url').value = '';
+        document.getElementById('new-image-url').value = '';
+        document.getElementById('new-title').value = '';
+        document.getElementById('new-desc').value = '';
+        document.getElementById('new-keywords').value = '';
+    }
+    function closeModals() {
+        document.getElementById('modal-step-1').style.display = 'none';
+        document.getElementById('modal-step-2').style.display = 'none';
+        document.getElementById('modal-step-3').style.display = 'none';
+    }
+    function goToStep2() {
+        let siteUrl = document.getElementById('new-site-url').value;
+        const imageUrl = document.getElementById('new-image-url').value;
+        if(!siteUrl) { alert('חובה להזין קישור'); return; }
+        
+        // כאן הקסם קורה! ההמרה מתבצעת לפני השמירה
+        siteUrl = fixYouTubeUrl(siteUrl);
+
+        tempEntry = { siteUrl, imageUrl };
+        document.getElementById('modal-step-1').style.display = 'none';
+        document.getElementById('modal-step-2').style.display = 'flex';
+    }
+    function goToStep3() {
+        const title = document.getElementById('new-title').value;
+        const desc = document.getElementById('new-desc').value;
+        if(!title) { alert('חובה להזין כותרת'); return; }
+        tempEntry.title = title;
+        tempEntry.desc = desc;
+        document.getElementById('modal-step-2').style.display = 'none';
+        document.getElementById('modal-step-3').style.display = 'flex';
+    }
+    function saveNewEntry() {
+        const keywords = document.getElementById('new-keywords').value;
+        if(!keywords) { alert('חובה להזין מילות חיפוש'); return; }
+        tempEntry.keywords = keywords;
+        
+        if(!tempEntry.siteUrl.startsWith('http')) tempEntry.siteUrl = 'https://' + tempEntry.siteUrl;
+        
+        db.push(tempEntry);
+        localStorage.setItem('snakeOS_DB_Final_V2', JSON.stringify(db));
+        closeModals();
+        if(tabStates[activeTabId].view === 'results') performSearch(tabStates[activeTabId].query);
+    }
+
+    openNewTab();
 </script>
 </body>
 </html>
